@@ -22,10 +22,7 @@ Zumo32U4LineSensors lineSensors;
 #define NUM_SENSORS 5
 uint16_t lineSensorValues[NUM_SENSORS];
 
-unsigned long time;
-unsigned long startTime;
-
-int speed = 300;
+int speed = 100;
 
 void setup()
 {
@@ -48,7 +45,6 @@ void setup()
   // still touching it.
   delay(1000);
 //  Serial.begin(9600);
-  startTime = millis();
 }
 
 void loop()
@@ -62,13 +58,9 @@ void loop()
   
   // Run both motors forward.
   ledYellow(1);
-  time = millis() - startTime;
-//  Serial.println(time);
-  if(time < 0.5*1000) {
-    speed = 300;
-//    lcd.print("Driving");
-  } else {
-    speed = 0;
+
+  if(lineSensorValues[2] < 500) {
+    speed = -100;
 //    lcd.print("Stopped");
   }
   motors.setLeftSpeed(speed);
