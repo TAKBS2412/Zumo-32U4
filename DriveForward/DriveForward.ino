@@ -5,11 +5,18 @@ If a motor on your Zumo has been flipped, you can correct its
 direction by uncommenting the call to flipLeftMotor() or
 flipRightMotor() in the setup() function. */
 
+/* DOCUMENTATION: pololu.com/docs/0J63/all */
+
 #include <Wire.h>
 #include <Zumo32U4.h>
 
 Zumo32U4Motors motors;
 Zumo32U4ButtonA buttonA;
+
+unsigned long time;
+unsigned long startTime;
+
+int speed = 300;
 
 void setup()
 {
@@ -23,63 +30,22 @@ void setup()
   // Delay so that the robot does not move away while the user is
   // still touching it.
   delay(1000);
+  Serial.begin(9600);
+  startTime = millis();
 }
 
 void loop()
 {
-  // Run left motor forward.
+  // Run both motors forward.
   ledYellow(1);
-  for (int speed = 0; speed <= 400; speed++)
-  {
-    motors.setLeftSpeed(speed);
-    motors.setRightSpeed(speed);
-    delay(2);
+  time = millis() - startTime;
+  Serial.println(time);
+  if(time < 0.5*1000) {
+    speed = 300;
+  } else {
+    speed = 0;
   }
-  /*
-  for (int speed = 400; speed >= 0; speed--)
-  {
-    motors.setLeftSpeed(speed);
-    delay(2);
-  }
-
-  // Run left motor backward.
-  ledYellow(0);
-  for (int speed = 0; speed >= -400; speed--)
-  {
-    motors.setLeftSpeed(speed);
-    delay(2);
-  }
-  for (int speed = -400; speed <= 0; speed++)
-  {
-    motors.setLeftSpeed(speed);
-    delay(2);
-  }
-
-  // Run right motor forward.
-  ledYellow(1);
-  for (int speed = 0; speed <= 400; speed++)
-  {
-    motors.setRightSpeed(speed);
-    delay(2);
-  }
-  for (int speed = 400; speed >= 0; speed--)
-  {
-    motors.setRightSpeed(speed);
-    delay(2);
-  }
-
-  // Run right motor backward.
-  ledYellow(0);
-  for (int speed = 0; speed >= -400; speed--)
-  {
-    motors.setRightSpeed(speed);
-    delay(2);
-  }
-  for (int speed = -400; speed <= 0; speed++)
-  {
-    motors.setRightSpeed(speed);
-    delay(2);
-  }
-  */
+  motors.setLeftSpeed(speed);
+  motors.setRightSpeed(speed);
   delay(500);
 }
