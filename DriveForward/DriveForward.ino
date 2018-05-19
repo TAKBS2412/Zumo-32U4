@@ -17,6 +17,11 @@ Zumo32U4ButtonA buttonA;
 
 Zumo32U4LCD lcd;
 
+Zumo32U4LineSensors lineSensors;
+
+#define NUM_SENSORS 5
+uint16_t lineSensorValues[NUM_SENSORS];
+
 unsigned long time;
 unsigned long startTime;
 
@@ -27,6 +32,10 @@ void setup()
   // Uncomment if necessary to correct motor directions:
   //motors.flipLeftMotor(true);
   //motors.flipRightMotor(true);
+
+  /** INITIALIZE LINE SENSORS*/
+
+  lineSensors.initFiveSensors(); //We initialize five sensors but in reality we only use 0, 2, and 4.
 
   // Tell the user to press button A.
   lcd.clear();
@@ -45,16 +54,22 @@ void setup()
 void loop()
 {
   lcd.clear();
+
+  // Read values from the sensors.
+  lineSensors.read(lineSensorValues, QTR_EMITTERS_ON);
+
+  lcd.print(lineSensorValues[2]);
+  
   // Run both motors forward.
   ledYellow(1);
   time = millis() - startTime;
 //  Serial.println(time);
   if(time < 0.5*1000) {
     speed = 300;
-    lcd.print("Driving");
+//    lcd.print("Driving");
   } else {
     speed = 0;
-    lcd.print("Stopped");
+//    lcd.print("Stopped");
   }
   motors.setLeftSpeed(speed);
   motors.setRightSpeed(speed);
