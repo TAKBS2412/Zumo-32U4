@@ -12,7 +12,7 @@ Zumo32U4LCD lcd;
 int16_t distanceToDrive = 500; // The distance setpoint.
 
 /* PID constants */
-double kP = 1.0;
+double kP = 1.5;
 double kI = 0.0;
 double kD = 0.0;
 
@@ -20,6 +20,8 @@ double kD = 0.0;
 double errorSum = 0;
 double error = 0;
 double lastError = 0;
+
+int counter = 0;
 
 void setup() {
   // Wait for the user to press button A.
@@ -31,6 +33,8 @@ void setup() {
   // Delay so that the robot does not move away while the user is
   // still touching it.
   delay(1000);
+
+  Serial.begin(9600);
 }
 
 void loop() {
@@ -43,8 +47,15 @@ void loop() {
 
   double speed = kP * error + kI * errorSum + kD * (error - lastError);
 
+  if(counter % 30 == 0) {
+    lcd.clear();
+    lcd.print(countsLeft);
+  }
+  
   motors.setLeftSpeed(speed);
   motors.setRightSpeed(speed);
   
   lastError = error;
+
+  counter++;
 }
