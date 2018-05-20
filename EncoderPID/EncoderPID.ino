@@ -9,10 +9,10 @@ Zumo32U4Encoders encoders;
 
 Zumo32U4LCD lcd;
 
-int distanceToDrive = 500; // The distance setpoint.
+int16_t distanceToDrive = 500; // The distance setpoint.
 
 /* PID constants */
-double kP = 0.4;
+double kP = 1.0;
 double kI = 0.0;
 double kD = 0.0;
 
@@ -25,7 +25,7 @@ void setup() {
   // Wait for the user to press button A.
   lcd.clear();
   lcd.print("Press A");
-
+  
   buttonA.waitForButton();
   
   // Delay so that the robot does not move away while the user is
@@ -34,5 +34,17 @@ void setup() {
 }
 
 void loop() {
+  int16_t countsLeft = encoders.getCountsLeft();
+  int16_t countsRight = encoders.getCountsRight();
+
+  error = distanceToDrive - countsLeft;
+  errorSum += error;
+  if(abs(errorSum) > 1000) errorSum = 0;
+
+  double speed = kP * error + kI * errorSum + kD * (error - lastError);
+
+  motors.setLeftSpeed(speed);
+  motors.setRightSpeed(speed);
   
+  lastError = error;
 }
