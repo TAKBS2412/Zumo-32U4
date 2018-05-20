@@ -23,6 +23,8 @@ double lastError = 0;
 
 int counter = 0;
 
+bool drivingDone = false;
+
 void setup() {
   // Wait for the user to press button A.
   lcd.clear();
@@ -38,24 +40,37 @@ void setup() {
 }
 
 void loop() {
-  int16_t countsLeft = encoders.getCountsLeft();
-  int16_t countsRight = encoders.getCountsRight();
+  if(!drivingDone) {
+    int16_t countsLeft = encoders.getCountsLeft();
+    int16_t countsRight = encoders.getCountsRight();
+  
+    error = distanceToDrive - countsRight;
+    errorSum += error;
+    if(abs(errorSum) > 1000) errorSum = 0;
+  
+    double speed = kP * error + kI * errorSum + kD * (error - lastError);
+  
+    if(counter % 30 == 0) {
+      lcd.clear();
+      lcd.print(countsLeft);
+    }
+    
+    motors.setLeftSpeed(speed);
+    motors.setRightSpeed(speed);
+    
+    lastError = error;
+  
+    counter++;
 
-  error = distanceToDrive - countsRight;
-  errorSum += error;
-  if(abs(errorSum) > 1000) errorSum = 0;
-
-  double speed = kP * error + kI * errorSum + kD * (error - lastError);
-
-  if(counter % 30 == 0) {
-    lcd.clear();
-    lcd.print(countsLeft);
+    if(abs(error) < 10) {
+      drivingDone = true;
+      lcd.clear();
+    }
+  } else {
+    motors.setLeftSpeed(0);
+    motors.setRightSpeed(0);
+    lcd.print("Done");
+    lcd.gotoXY(0, 1);
+    lcd.print("Driving!");
   }
-  
-  motors.setLeftSpeed(speed);
-  motors.setRightSpeed(speed);
-  
-  lastError = error;
-
-  counter++;
 }
