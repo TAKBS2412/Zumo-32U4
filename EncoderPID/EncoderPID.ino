@@ -41,7 +41,7 @@ void loop() {
   int16_t countsLeft = encoders.getCountsLeft();
   int16_t countsRight = encoders.getCountsRight();
 
-  error = distanceToDrive - countsLeft;
+  error = distanceToDrive - countsRight;
   errorSum += error;
   if(abs(errorSum) > 1000) errorSum = 0;
 
