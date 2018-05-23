@@ -26,7 +26,13 @@ int counter = 0;
 
 bool turningDone = false;
 
+int32_t angle = 0;
+
 void setup() {
+  turnSensorSetup();
+  delay(500);
+  turnSensorReset();
+  
   // Wait for the user to press button A.
   lcd.clear();
   lcd.print("Press A");
@@ -41,8 +47,18 @@ void setup() {
 }
 
 void loop() {
+  angle = (((int32_t)turnAngle >> 16) * 360) >> 16;
+  
+  turnSensorUpdate();
+  
+  if(counter % 30 == 0) {
+      lcd.clear();
+      lcd.print(angle);
+  }
+  
+  counter++;
+  /*
   if(!turningDone) {
-    int16_t angle = /*somehow get the angle*/;
   
     error = angleToTurn - angle;
     errorSum += error;
@@ -73,4 +89,6 @@ void loop() {
     lcd.gotoXY(0, 1);
     lcd.print("Turning!");
   }
+  */
+  
 }
