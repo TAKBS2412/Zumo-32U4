@@ -13,8 +13,8 @@ Zumo32U4LCD lcd;
 int16_t angleToTurn = 90; // The angle setpoint.
 
 /* PID constants */
-double kP = 1.5;
-double kI = 0.0;
+double kP = 4.4;
+double kI = 0.1;
 double kD = 0.0;
 
 /* Integral windup term and error */
@@ -57,7 +57,7 @@ void loop() {
   }
   
   counter++;
-  /*
+  
   if(!turningDone) {
   
     error = angleToTurn - angle;
@@ -71,14 +71,14 @@ void loop() {
       lcd.print(angle);
     }
     
-    motors.setLeftSpeed(speed);
-    motors.setRightSpeed(-speed);
+    motors.setLeftSpeed(-speed);
+    motors.setRightSpeed(speed);
     
     lastError = error;
   
     counter++;
 
-    if(abs(error) < 10) {
+    if(abs(error) < 1) {
       turningDone = true;
       lcd.clear();
     }
@@ -89,6 +89,4 @@ void loop() {
     lcd.gotoXY(0, 1);
     lcd.print("Turning!");
   }
-  */
-  
 }
