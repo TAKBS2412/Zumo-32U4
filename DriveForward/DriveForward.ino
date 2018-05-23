@@ -5,7 +5,7 @@ If a motor on your Zumo has been flipped, you can correct its
 direction by uncommenting the call to flipLeftMotor() or
 flipRightMotor() in the setup() function. */
 
-/* DOCUMENTATION: pololu.com/docs/0J63/all 
+/* DOCUMENTATION: http://pololu.com/docs/0J63/all 
                   http://pololu.github.io/zumo-32u4-arduino-library/
 */
 
