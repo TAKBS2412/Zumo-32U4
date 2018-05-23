@@ -7,7 +7,7 @@ measure how much the robot has turned about its Z axis. */
 #include <Wire.h>
 #include "Gyro.h"
 
-/* turnAngle is a 32-bit unsigned integer representing the amount
+/* angle is a 32-bit unsigned integer representing the amount
 the robot has turned since the last time turnSensorReset was
 called.  This is computed solely using the Z axis of the gyro, so
 it could be inaccurate if the robot is rotated about the X or Y
@@ -17,9 +17,9 @@ Our convention is that a value of 0x20000000 represents a 45
 degree counter-clockwise rotation.  This means that a uint32_t
 can represent any angle between 0 degrees and 360 degrees.  If
 you cast it to a signed 32-bit integer by writing
-(int32_t)turnAngle, that integer can represent any angle between
+(int32_t)angle, that integer can represent any angle between
 -180 degrees and 180 degrees. */
-uint32_t turnAngle = 0;
+uint32_t angle = 0;
 
 // turnRate is the current angular rate of the gyro, in units of
 // 0.07 degrees per second.
@@ -87,18 +87,18 @@ void turnSensorSetup()
   {
     turnSensorUpdate();
     lcd.gotoXY(0, 0);
-    lcd.print((((int32_t)turnAngle >> 16) * 360) >> 16);
+    lcd.print((((int32_t)angle >> 16) * 360) >> 16);
     lcd.print(F("   "));
   }
   lcd.clear();
 }
 
 // This should be called to set the starting point for measuring
-// a turn.  After calling this, turnAngle will be 0.
+// a turn.  After calling this, angle will be 0.
 void turnSensorReset()
 {
   gyroLastUpdate = micros();
-  turnAngle = 0;
+  angle = 0;
 }
 
 // Read the gyro and update the angle.  This should be called as
@@ -120,12 +120,12 @@ void turnSensorUpdate()
   int32_t d = (int32_t)turnRate * dt;
 
   // The units of d are gyro digits times microseconds.  We need
-  // to convert those to the units of turnAngle, where 2^29 units
+  // to convert those to the units of angle, where 2^29 units
   // represents 45 degrees.  The conversion from gyro digits to
   // degrees per second (dps) is determined by the sensitivity of
   // the gyro: 0.07 degrees per second per digit.
   //
   // (0.07 dps/digit) * (1/1000000 s/us) * (2^29/45 unit/degree)
   // = 14680064/17578125 unit/(digit*us)
-  turnAngle += (int64_t)d * 14680064 / 17578125;
+  angle += (int64_t)d * 14680064 / 17578125;
 }
