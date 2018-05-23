@@ -2,6 +2,7 @@
 
 #include <Wire.h>
 #include <Zumo32U4.h>
+#include "Gyro.h"
 
 Zumo32U4Motors motors;
 Zumo32U4ButtonA buttonA;
