@@ -7,19 +7,19 @@ measure how much the robot has turned about its Z axis. */
 #include <Zumo32U4.h>
 
 // This constant represents a turn of 45 degrees.
-const int32_t angle45 = 0x20000000;
+const int32_t turnAngle45 = 0x20000000;
 
 // This constant represents a turn of 90 degrees.
-const int32_t angle90 = angle45 * 2;
+const int32_t turnAngle90 = turnAngle45 * 2;
 
 // This constant represents a turn of approximately 1 degree.
-const int32_t angle1 = (angle45 + 22) / 45;
+const int32_t turnAngle1 = (turnAngle45 + 22) / 45;
 
 // These are defined in TurnSensor.cpp:
 void turnSensorSetup();
 void turnSensorReset();
 void turnSensorUpdate();
-extern uint32_t angle;
+extern uint32_t turnAngle;
 extern int16_t turnRate;
 
 // These objects must be defined in your sketch.

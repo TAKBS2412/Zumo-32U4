@@ -42,6 +42,8 @@ void setup() {
 
 void loop() {
   if(!turningDone) {
+    int16_t angle = /*somehow get the angle*/;
+  
     error = angleToTurn - angle;
     errorSum += error;
     if(abs(errorSum) > 1000) errorSum = 0;
