@@ -40,37 +40,53 @@ void setup() {
 }
 
 void loop() {
-  if(!drivingDone) {
-    int16_t countsLeft = encoders.getCountsLeft();
-    int16_t countsRight = encoders.getCountsRight();
+  int16_t countsLeft = encoders.getCountsLeft();
+  int16_t countsRight = encoders.getCountsRight();
   
+  counter++;
+  
+  if(drivingDone || counter % 1000 == 0) {
+      lcd.clear();
+      lcd.print(countsLeft);
+      lcd.print(" ");
+  }
+    
+  if(!drivingDone) { 
     error = distanceToDrive - countsRight;
     errorSum += error;
     if(abs(errorSum) > 1000) errorSum = 0;
   
     double speed = kP * error + kI * errorSum + kD * (error - lastError);
-  
-    if(counter % 30 == 0) {
-      lcd.clear();
-      lcd.print(countsLeft);
-    }
     
     motors.setLeftSpeed(speed);
     motors.setRightSpeed(speed);
     
     lastError = error;
-  
-    counter++;
 
     if(abs(error) < 10) {
       drivingDone = true;
-      lcd.clear();
+//      lcd.clear();
     }
   } else {
     motors.setLeftSpeed(0);
     motors.setRightSpeed(0);
+  
     lcd.print("Done");
     lcd.gotoXY(0, 1);
     lcd.print("Driving!");
+    delay(100);
+
+    /*
+    lcd.clear();
+    lcd.print("Done");
+    lcd.gotoXY(0, 1);
+    lcd.print("Driving!");
+    delay(500);
+    */
+    /*
+    lcd.print("Done");
+    lcd.gotoXY(0, 1);
+    lcd.print("Driving!");
+    */
   }
 }
