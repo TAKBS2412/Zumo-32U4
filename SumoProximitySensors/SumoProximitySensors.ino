@@ -29,7 +29,7 @@ unsigned int lineSensorValues[3];
 // consider that line sensor to have detected the white border at
 // the edge of the ring.  This value might need to be tuned for
 // different lighting conditions, surfaces, etc.
-const uint16_t lineSensorThreshold = 1000;
+const uint16_t lineSensorThreshold = 800;
 
 // The speed that the robot uses when backing up.
 const uint16_t reverseSpeed = 200;
@@ -255,19 +255,6 @@ void loop()
       lcd.print(F("drive"));
     }
 
-    // Check for borders.
-    lineSensors.read(lineSensorValues);
-    if (lineSensorValues[0] < lineSensorThreshold)
-    {
-      scanDir = DirectionRight;
-      changeState(StateBacking);
-    }
-    if (lineSensorValues[2] < lineSensorThreshold)
-    {
-      scanDir = DirectionLeft;
-      changeState(StateBacking);
-    }
-
     // Read the proximity sensors to see if know where the
     // opponent is.
     proxSensors.read();
@@ -332,6 +319,18 @@ void loop()
         motors.setSpeeds(forwardSpeed, forwardSpeed);
       }
       ledRed(0);
+    }
+    // Check for borders.
+    lineSensors.read(lineSensorValues);
+    if (lineSensorValues[0] < lineSensorThreshold)
+    {
+      scanDir = DirectionRight;
+      changeState(StateBacking);
+    }
+    if (lineSensorValues[2] < lineSensorThreshold)
+    {
+      scanDir = DirectionLeft;
+      changeState(StateBacking);
     }
   }
 }
