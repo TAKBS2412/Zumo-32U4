@@ -41,6 +41,18 @@ void setup() {
   delay(1000);
 
   Serial.begin(9600);
+  
+  unsigned long startTime = millis();
+
+  while(millis() - startTime < 1000) {
+    motors.setLeftSpeed(400);
+    motors.setRightSpeed(400);
+  }
+
+  motors.setLeftSpeed(0);
+  motors.setRightSpeed(0);
+
+  delay(1000);
 
   startingCountsLeft = encoders.getCountsLeft();
   startingCountsRight = encoders.getCountsRight();
