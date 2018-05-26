@@ -1,4 +1,4 @@
-const int profileSize = 120;  
+const unsigned int profileSize = 120;  
   
 const double motionProfile[][2] = { 
 {0.000232,  0.023177},
