@@ -10,6 +10,8 @@ Zumo32U4LCD lcd;
 
 LSM303 accelerometer;
 
+unsigned long startTime = 0;
+
 void setup() {
   Wire.begin();
 
@@ -37,17 +39,28 @@ void setup() {
   // still touching it.
   delay(1000);
   Serial.begin(9600);
+  startTime = millis();
 }
 
 void loop() {
   lcd.clear();
   accelerometer.read();
-//  motors.setLeftSpeed(400);
-//  motors.setRightSpeed(400);
+  if(millis() - startTime < 1000) {
+    Serial.println("Hello, world!");
+    motors.setLeftSpeed(400);
+    motors.setRightSpeed(400);
 
-//  Serial.println(accelerometer.a.x);
-  lcd.println(accelerometer.a.x);
+    if(accelerometer.a.x < 0) {
+      ledRed(0);
+    }
+  } else {
+    motors.setLeftSpeed(0);
+    motors.setRightSpeed(0);
+  }
+
+  Serial.println(accelerometer.a.x);
+//  lcd.println(accelerometer.a.y);
   
-  delay(500);
+  delay(50);
   
 }
