@@ -6,6 +6,8 @@
 Zumo32U4Motors motors;
 Zumo32U4ButtonA buttonA;
 
+Zumo32U4Buzzer buzzer;
+
 Zumo32U4LCD lcd;
 
 LSM303 accelerometer;
@@ -51,6 +53,13 @@ void loop() {
     motors.setRightSpeed(400);
 
     if(accelerometer.a.x < 0) {
+      // Collision detected
+      ledRed(1);
+      buzzer.playNote(NOTE_A(4), 2000, 15);
+      Serial.println("WE HIT SOMETHING!!!");
+      delay(200);
+      buzzer.stopPlaying();
+    } else {
       ledRed(0);
     }
   } else {
