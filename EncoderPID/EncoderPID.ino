@@ -25,6 +25,10 @@ int counter = 0;
 
 bool drivingDone = false;
 
+/* Starting encoder values */
+int16_t startingCountsLeft = 0;
+int16_t startingCountsRight = 0;
+
 void setup() {
   // Wait for the user to press button A.
   lcd.clear();
@@ -37,11 +41,14 @@ void setup() {
   delay(1000);
 
   Serial.begin(9600);
+
+  startingCountsLeft = encoders.getCountsLeft();
+  startingCountsRight = encoders.getCountsRight();
 }
 
 void loop() {
-  int16_t countsLeft = encoders.getCountsLeft();
-  int16_t countsRight = encoders.getCountsRight();
+  int16_t countsLeft = encoders.getCountsLeft() - startingCountsLeft;
+  int16_t countsRight = encoders.getCountsRight() - startingCountsRight;
   
   counter++;
   
