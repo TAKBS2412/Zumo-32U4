@@ -46,6 +46,10 @@ void loop() {
 
     Serial.print("Velocity: ");
     Serial.println(velocity);
+
+    double volts = readBatteryMillivolts() / 1000.0;
+    Serial.print("Voltage: ");
+    Serial.println(volts);
     
     segIndex++;
     delay(200);
