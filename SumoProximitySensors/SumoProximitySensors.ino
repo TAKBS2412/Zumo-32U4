@@ -182,7 +182,7 @@ void loop()
     else
     {
       // We have waited long enough.  Start moving.
-      changeState(StateScanning);
+      changeState(StateDriving);
     }
   }
   else if (state == StateBacking)
@@ -236,8 +236,8 @@ void loop()
       // Read the proximity sensors.  If we detect anything with
       // the front sensor, then start driving forwards.
       proxSensors.read();
-      if (proxSensors.countsFrontWithLeftLeds() >= 2
-        || proxSensors.countsFrontWithRightLeds() >= 2)
+      if (proxSensors.countsFrontWithLeftLeds() >= 4
+        || proxSensors.countsFrontWithRightLeds() >= 4)
       {
         changeState(StateDriving);
       }
