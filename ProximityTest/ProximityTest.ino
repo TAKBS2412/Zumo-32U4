@@ -5,6 +5,7 @@
 
 Zumo32U4LCD lcd;
 Zumo32U4ButtonA buttonA;
+Zumo32U4Motors motors;
 
 Zumo32U4ProximitySensors proxSensors;
 Zumo32U4Buzzer buzzer;
@@ -49,6 +50,8 @@ void loop() {
       
     delay(200);
     buzzer.stopPlaying();
+
+    motors.setSpeeds(400, 400);
   }
   else if (diff > 0)
   {
@@ -57,6 +60,8 @@ void loop() {
     lcd.print("Turning");
     lcd.gotoXY(0, 1);
     lcd.print("right...");
+
+    motors.setSpeeds(200, 300);
   }
   else if (diff < 0)
   {
@@ -65,6 +70,8 @@ void loop() {
     lcd.print("Turning");
     lcd.gotoXY(0, 1);
     lcd.print("left...");
+
+    motors.setSpeeds(300, 200);
   }
   else if (diff == 0)
   {
@@ -73,5 +80,7 @@ void loop() {
     lcd.print("Driving");
     lcd.gotoXY(0, 1);
     lcd.print("forward");
+
+    motors.setSpeeds(200, 200);
   }
 }
