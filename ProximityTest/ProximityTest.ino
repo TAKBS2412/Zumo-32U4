@@ -38,8 +38,26 @@ void loop() {
     proxSensors.countsRightWithLeftLeds(),
     proxSensors.countsRightWithRightLeds()
   );
+
+  Serial.println(buffer);
+
+  int leftSpeed;
+  int rightSpeed;
+
+  if (sum == 12) {
+    // There's an object right in front of us, so we should drive towards it at maximum speed.
+    leftSpeed = 400;
+    rightSpeed = 400;
+  } else if (sum >= 8) {
+    // There's an object somewhat close to us, so we should drive forwards but not too fast.
+    leftSpeed = 300;
+    rightSpeed = 300;
+  } else {
+    // The signal isn't very strong, so just drive forward slowly.
+    leftSpeed = 200;
+    rightSpeed = 200;
+  }
   
-  Serial.print(buffer);
   if (sum == 12)
   {
     // There's an object right in front of us, so we should ram it.
