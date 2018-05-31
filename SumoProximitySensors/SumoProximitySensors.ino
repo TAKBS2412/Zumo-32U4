@@ -114,6 +114,9 @@ bool justChangedState;
 // This gets set whenever we clear the display.
 bool displayCleared;
 
+// This gets set whenever the robot is really close to an opponent and we don't want to back off.
+bool veryClose;
+
 void setup()
 {
   // Uncomment if necessary to correct motor directions:
@@ -124,6 +127,8 @@ void setup()
   proxSensors.initThreeSensors();
 
   changeState(StatePausing);
+
+  veryClose = false;
 }
 
 void loop()
@@ -261,7 +266,26 @@ void loop()
     uint8_t sum = proxSensors.countsFrontWithRightLeds() + proxSensors.countsFrontWithLeftLeds();
     int8_t diff = proxSensors.countsFrontWithRightLeds() - proxSensors.countsFrontWithLeftLeds();
 
-    if (sum >= 4 || timeInThisState() > stalemateTime)
+    if (sum == 12)
+    {
+      buzzer.playNote(NOTE_G(4), 2000, 15);
+      
+      delay(200);
+      buzzer.stopPlaying();
+
+      // The front sensor is getting a strong signal, or we have
+      // been driving forward for a while now without seeing the
+      // border.  Either way, there is probably a robot in front
+      // of us and we should switch to ramming speed to try to
+      // push the robot out of the ring.
+      motors.setSpeeds(rammingSpeed, rammingSpeed);
+
+      // Turn on the red LED when ramming.
+      ledRed(1);
+
+      veryClose = true;
+    }
+    else if (sum >= 4 || timeInThisState() > stalemateTime)
     {
       // The front sensor is getting a strong signal, or we have
       // been driving forward for a while now without seeing the
@@ -272,6 +296,8 @@ void loop()
 
       // Turn on the red LED when ramming.
       ledRed(1);
+
+      veryClose = false;
     }
     else if (sum == 0)
     {
@@ -297,6 +323,8 @@ void loop()
       }
 
       ledRed(0);
+      
+      veryClose = false;
     }
     else
     {
@@ -319,18 +347,22 @@ void loop()
         motors.setSpeeds(forwardSpeed, forwardSpeed);
       }
       ledRed(0);
+      
+      veryClose = false;
     }
-    // Check for borders.
-    lineSensors.read(lineSensorValues);
-    if (lineSensorValues[0] < lineSensorThreshold)
-    {
-      scanDir = DirectionRight;
-      changeState(StateBacking);
-    }
-    if (lineSensorValues[2] < lineSensorThreshold)
-    {
-      scanDir = DirectionLeft;
-      changeState(StateBacking);
+    if(!veryClose) {
+      // Check for borders.
+      lineSensors.read(lineSensorValues);
+      if (lineSensorValues[0] < lineSensorThreshold)
+      {
+        scanDir = DirectionRight;
+        changeState(StateBacking);
+      }
+      if (lineSensorValues[2] < lineSensorThreshold)
+      {
+        scanDir = DirectionLeft;
+        changeState(StateBacking);
+      }
     }
   }
 }
