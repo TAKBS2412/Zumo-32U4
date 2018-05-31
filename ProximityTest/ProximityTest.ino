@@ -45,9 +45,24 @@ void loop() {
     lcd.clear();
     lcd.print("Ramming...");
 
-    buzzer.playNote(NOTE_G(4), 2000, 15);
+//    buzzer.playNote(NOTE_G(4), 2000, 15);
       
     delay(200);
     buzzer.stopPlaying();
+  }
+  else if (diff > 0)
+  {
+    // There's an object to the right of us, so we should turn right.
+    lcd.clear();
+    lcd.print("Turning");
+    lcd.gotoXY(0, 1);
+    lcd.print("right...");
+  } else if (diff < 0)
+  {
+    // There's an object to the left of us, so we should turn left.
+    lcd.clear();
+    lcd.print("Turning");
+    lcd.gotoXY(0, 1);
+    lcd.print("left...");
   }
 }
