@@ -83,6 +83,9 @@ void loop() {
 
   int turnSpeed = diff * 100; // How much we want to turn to the right (this value is added to leftSpeed and subtracted from rightSpeed).
 
+
+  /* OLD CODE BASED OFF OF SumoProximitySensors EXAMPLE */
+  /*
   if (sum == 12)
   {
     // There's an object right in front of us, so we should ram it.
@@ -121,4 +124,5 @@ void loop() {
 
     motors.setSpeeds(200, 200);
   }
+  */
 }
