@@ -83,6 +83,8 @@ void loop() {
 
   int turnSpeed = diff * 100; // How much we want to turn to the right (this value is added to leftSpeed and subtracted from rightSpeed).
 
+  int finalLeftSpeed = constrain(leftSpeed + turnSpeed, 0, 400);
+  int finalRightSpeed = constrain(rightSpeed - turnSpeed, 0, 400);
 
   /* OLD CODE BASED OFF OF SumoProximitySensors EXAMPLE */
   /*
