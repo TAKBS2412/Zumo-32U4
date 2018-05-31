@@ -57,12 +57,21 @@ void loop() {
     lcd.print("Turning");
     lcd.gotoXY(0, 1);
     lcd.print("right...");
-  } else if (diff < 0)
+  }
+  else if (diff < 0)
   {
     // There's an object to the left of us, so we should turn left.
     lcd.clear();
     lcd.print("Turning");
     lcd.gotoXY(0, 1);
     lcd.print("left...");
+  }
+  else if (diff == 0)
+  {
+    // There's an object in front of us, but the signal isn't as strong.
+    lcd.clear();
+    lcd.print("Driving");
+    lcd.gotoXY(0, 1);
+    lcd.print("forward");
   }
 }
