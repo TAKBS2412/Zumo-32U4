@@ -11,7 +11,6 @@ Zumo32U4ButtonA buttonA;
 Zumo32U4Motors motors;
 
 Zumo32U4ProximitySensors proxSensors;
-Zumo32U4Buzzer buzzer;
 
 void setup() {
   proxSensors.initThreeSensors();
@@ -89,11 +88,6 @@ void loop() {
     // There's an object right in front of us, so we should ram it.
     lcd.clear();
     lcd.print("Ramming...");
-
-//    buzzer.playNote(NOTE_G(4), 2000, 15);
-      
-    delay(200);
-    buzzer.stopPlaying();
 
     motors.setSpeeds(400, 400);
   }
