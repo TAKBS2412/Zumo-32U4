@@ -27,7 +27,9 @@ void loop() {
   proxSensors.read();
 
   uint8_t sum = proxSensors.countsFrontWithRightLeds() + proxSensors.countsFrontWithLeftLeds();
-  int8_t diff = proxSensors.countsFrontWithRightLeds() - proxSensors.countsFrontWithLeftLeds();
+//  int8_t diff = proxSensors.countsFrontWithRightLeds() - proxSensors.countsFrontWithLeftLeds();
+
+  int8_t diff = proxSensors.countsRightWithRightLeds() - proxSensors.countsLeftWithLeftLeds();
   
   static char buffer[80];
   sprintf(buffer, "%d %d %d %d %d %d\n",
@@ -41,8 +43,8 @@ void loop() {
 
   Serial.println(buffer);
 
-  int leftSpeed;
-  int rightSpeed;
+  int leftSpeed; // How fast we want to drive on the left side.
+  int rightSpeed; // How fast we want to drive on the right side.
 
   if (sum == 12) {
     // There's an object right in front of us, so we should drive towards it at maximum speed.
@@ -57,6 +59,17 @@ void loop() {
     leftSpeed = 200;
     rightSpeed = 200;
   }
+
+  /* Calculate the turning speed */
+
+  /*
+   * The variable diff should be the difference between the values from the right proximity sensor and the left proximity sensor. 
+   * The higher diff is, the more the robot should turn to the right, and the lower diff is, the more the robot should turn to the left.
+   * If diff is zero, then the robot should not turn at all.
+   * Usually, diff is between -2 and 2 (this is based off of experimental data). 
+   */
+
+  int turnSpeed = diff * 100; // How much we want to turn to the right (this value is added to leftSpeed and subtracted from rightSpeed).
   
   if (sum == 12)
   {
