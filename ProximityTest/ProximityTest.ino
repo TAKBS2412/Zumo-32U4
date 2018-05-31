@@ -1,4 +1,7 @@
-/* This is a test program for reading values from the proximity sensors and detecting collisions. */
+/* 
+ * This is a test program that uses the robot's proximity sensors to help it follow a target. 
+ * While the sample code in SumoProximitySensors only considers the speed the robot should travel or how much it should turn, this program considers both.
+ */
 
 #include <Wire.h>
 #include <Zumo32U4.h>
@@ -43,6 +46,16 @@ void loop() {
 
   Serial.println(buffer);
 
+  /* Calculate the driving speed */
+
+  /*
+   * The variable sum should be the sum of the values from the robot's front proximity sensor.
+   * The higher sum is, the closer the robot is to a target.
+   * Usually, sum ranges from 4 (for no target) to 12 (the closest a target can be).
+   * These values were determined via experimental data in a target-rich environment.
+   * Therefore, the values may be slightly lower if the robot does not have as many targets surrounding it when you test this.
+   */
+
   int leftSpeed; // How fast we want to drive on the left side.
   int rightSpeed; // How fast we want to drive on the right side.
 
@@ -70,7 +83,7 @@ void loop() {
    */
 
   int turnSpeed = diff * 100; // How much we want to turn to the right (this value is added to leftSpeed and subtracted from rightSpeed).
-  
+
   if (sum == 12)
   {
     // There's an object right in front of us, so we should ram it.
